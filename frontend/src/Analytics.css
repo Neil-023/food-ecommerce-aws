@@ -1,0 +1,499 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+.analytics-body {
+  width: 100vw;
+  /* Allow the body to scroll if contents get larger than the screen during zoom */
+  min-height: 100vh; 
+  background-color: #F4ECDF;
+  display: flex;
+  flex-direction: column;
+}
+
+.analytics-title {
+  font-size: calc(35 / var(--dw) * 100vw); /* 35px */
+  /* Converted vh to vw so spacing scales with the text */
+  margin-top: calc(100 / var(--dw) * 100vw); 
+  margin-left: 6vw;
+}
+
+.analytics-container {
+  display: flex;
+  flex-direction: row;
+  width: 87%;
+  /* Removed strict 70% height so it can grow with its contents */
+  height: auto; 
+  flex-grow: 1; 
+  margin-left: 6vw;
+  margin-bottom: calc(50 / var(--dw) * 100vw); /* Added padding to bottom */
+}
+
+.analytics-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65%;
+  height: auto; /* Let it grow */
+  gap: calc(40 / var(--dw) * 100vw); /* Replaced the 50% heights below with a standard gap */
+}
+
+.analytics-graph {
+  display: flex;
+  flex-direction: row;
+  gap: calc(40 / var(--dw) * 100vw); /* 40px */
+  align-items: center;
+  width: 100%;
+  height: auto; /* Changed from 50% */
+}
+
+.analytics-stats {
+  display: flex;
+  flex-direction: row;
+  gap: calc(40 / var(--dw) * 100vw); /* 40px */
+  align-items: center;
+  width: 100%;
+  height: auto; /* Changed from 50% */
+}
+
+/* card wrapper */
+.card {
+  background: #f9f4eb;
+  border-radius: calc(16 / var(--dw) * 100vw); /* 16px */
+  padding: calc(16 / var(--dw) * 100vw); /* 16px */
+  padding-top: 0;
+  width: calc(510 / var(--dw) * 100vw); /* 510px */
+  /* Changed height to min-height so it doesn't trap text */
+  min-height: calc(300 / var(--dw) * 100vw); /* 300px */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: sans-serif;
+  border: #c47b08 calc(1 / var(--dw) * 100vw) solid; /* 1px */
+}
+
+/* title */
+.card__title {
+  margin-bottom: calc(1.6 / var(--dw) * 100vw); /* 1.6px */
+  font-size: calc(20 / var(--dw) * 100vw); /* 20px */
+  color: #3b3026;
+}
+
+/* donut container to position center text */
+.donut-container {
+  position: relative;
+  width: calc(150 / var(--dw) * 100vw); /* 150px */
+  /* Fixed the height to be perfectly square (150px) so the circle doesn't stretch into an oval */
+  height: calc(150 / var(--dw) * 100vw); 
+  margin: calc(20 / var(--dw) * 100vw) auto calc(24 / var(--dw) * 100vw); /* 1.5rem -> 24px */
+}
+
+/* the donut itself */
+.donut-chart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(#c47b08 0% 30%,
+      #ffb52e 30% 60%,
+      #ffd182 60% 80%,
+      #ffe6a7 80% 100%);
+  position: relative;
+}
+
+/* ensure Chart.js canvas fills the .donut-chart box */
+.donut-chart canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* if you want to hide the CSS conic‑gradient fallback once Chart.js renders */
+.donut-chart {
+  background: none;
+}
+
+/* cut‑out center to make it a donut */
+.donut-chart::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 60%;
+  background: #f9f4eb;
+  border-radius: 50%;
+}
+
+/* number in the center */
+.donut-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(32 / var(--dw) * 100vw); /* 32px */
+  font-weight: bold;
+  color: #3b3026;
+  pointer-events: none;
+  z-index: 5;
+  width: auto;
+  text-align: center;
+  padding: 0;
+}
+
+/* legend as two‑column grid */
+.legend {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(12 / var(--dw) * 100vw) calc(24 / var(--dw) * 100vw); /* 12px 24px */
+  font-size: calc(14.4 / var(--dw) * 100vw); /* 14.4px */
+  color: #7a6a57;
+}
+
+.legend__item {
+  display: flex;
+  align-items: center;
+}
+
+.legend__dot {
+  display: inline-block;
+  width: calc(12 / var(--dw) * 100vw); /* 12px */
+  height: calc(12 / var(--dw) * 100vw); /* 12px */
+  border-radius: 50%;
+  margin-right: calc(8 / var(--dw) * 100vw); /* 8px */
+}
+
+/* dot colors */
+.dot--1 { background: #c47b08; }
+.dot--2 { background: #ffb52e; }
+.dot--3 { background: #ffd182; }
+.dot--4 { background: #ffe6a7; }
+
+.icon-circle {
+  width: calc(96 / var(--dw) * 100vw); /* 96px */
+  height: calc(96 / var(--dw) * 100vw); /* 96px */
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto calc(16 / var(--dw) * 100vw); /* 16px */
+}
+
+.icon {
+  width: calc(32 / var(--dw) * 100vw); /* 32px */
+  height: calc(32 / var(--dw) * 100vw); /* 32px */
+  fill: none;
+  stroke: #c47b08;
+  stroke-width: 2; 
+}
+
+.value {
+  font-size: calc(40 / var(--dw) * 100vw); /* 40px */
+  font-weight: 800;
+  color: #3b3026;
+  margin: 0;
+}
+
+.subtitle {
+  margin-top: calc(8 / var(--dw) * 100vw); /* 8px */
+  color: #7a6a57;
+  font-size: calc(16 / var(--dw) * 100vw); /* 16px */
+}
+
+.icon-circle .material-symbols-outlined {
+  font-size: calc(64 / var(--dw) * 100vw); /* 64px */
+  color: #c47b08;
+}
+
+.order-history {
+  display: flex;
+  width: 35%;
+  height: auto; /* Changed to auto so it doesn't clip */
+  line-height: 2;
+}
+
+.orders-card {
+  background: #f9f4eb;
+  border-radius: calc(16 / var(--dw) * 100vw); /* 16px */
+  width: 90%;
+  height: auto; /* Let it expand with content */
+  min-height: calc(640 / var(--dw) * 100vw); /* Ensures it stays tall to match other columns */
+  border: #c47b08 calc(1 / var(--dw) * 100vw) solid; /* 1px */
+  margin: 0 auto auto auto;
+  font-family: sans-serif;
+  padding-bottom: calc(20 / var(--dw) * 100vw);
+}
+
+.orders-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 1.5vw;
+  margin-top: calc(20 / var(--dw) * 100vw);
+  width: 13vw;
+}
+
+.orders-card__header h3 {
+  font-size: calc(24 / var(--dw) * 100vw); /* 24px */
+  font-weight: 700;
+  color: #3b3026;
+}
+
+.icon-clock {
+  width: calc(20 / var(--dw) * 100vw); /* 20px */
+  height: calc(20 / var(--dw) * 100vw); /* 20px */
+  fill: none;
+  stroke: #7a6a57;
+  stroke-width: 2;
+}
+
+.orders-list {
+  list-style: none;
+  padding: 0;
+  margin: calc(16 / var(--dw) * 100vw) calc(24 / var(--dw) * 100vw) calc(32 / var(--dw) * 100vw) calc(24 / var(--dw) * 100vw); 
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  /* Changed vh to auto/min-height. vh makes text spill when zoomed */
+  height: auto; 
+  min-height: calc(60 / var(--dw) * 100vw); 
+  border-radius: calc(15 / var(--dw) * 100vw); /* 15px */
+  padding: calc(12 / var(--dw) * 100vw) calc(27.2 / var(--dw) * 100vw); /* 12px 27.2px */
+  margin-bottom: calc(16 / var(--dw) * 100vw); /* 16px */
+  box-shadow: 0 calc(1 / var(--dw) * 100vw) calc(3 / var(--dw) * 100vw) rgba(0, 0, 0, 0.05); /* 0 1px 3px */
+}
+
+.order-text {
+  flex: 1;
+}
+
+.order-title {
+  margin: 0;
+  font-weight: 800;
+  color: #3b3026;
+  font-size: calc(18 / var(--dw) * 100vw);
+}
+
+.order-sub {
+  margin: calc(4 / var(--dw) * 100vw) 0 0; /* 4px */
+  font-size: calc(14 / var(--dw) * 100vw); /* 14px */
+  color: #7a6a57;
+}
+
+.order-img {
+  width: calc(60 / var(--dw) * 100vw); 
+  height: calc(60 / var(--dw) * 100vw); 
+  border-radius: calc(9999 / var(--dw) * 100vw); 
+  object-fit: cover;
+  margin-left: calc(16 / var(--dw) * 100vw); 
+}
+
+.order-action {
+  width: calc(24 / var(--dw) * 100vw); /* 24px */
+  height: calc(24 / var(--dw) * 100vw); /* 24px */
+  fill: none;
+  stroke: #7a6a57;
+  stroke-width: 2;
+  margin-left: calc(16 / var(--dw) * 100vw); /* 16px */
+}
+
+.orders-card__footer {
+  text-align: center;
+}
+
+.orders-card__footer a {
+  font-size: calc(14 / var(--dw) * 100vw); /* 14px */
+  color: #c47b08;
+  text-decoration: none;
+}
+
+.orders-card__footer a:hover {
+  text-decoration: underline;
+}
+
+.top-customer-spent {
+  font-size: calc(45 / var(--dw) * 100vw); /* 45px */
+  font-weight: 800;
+  line-height: 0;
+}
+
+.title3 {
+  line-height: 0;
+}
+
+.chart-box {
+  width: 100%;
+  position: relative;
+}
+
+.chart-box-sm {
+  height: calc(150 / var(--dw) * 100vw);
+}
+
+.chart-box-lg {
+  height: calc(200 / var(--dw) * 100vw);
+}
+
+@media (max-width: 768px) {
+  .analytics-body {
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 1rem;
+  }
+
+  .analytics-title {
+    margin: 5.5rem 0 0.7rem 0.85rem;
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .analytics-container {
+    width: 100%;
+    margin: 0;
+    padding: 0 0.75rem;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .analytics-cards,
+  .analytics-graph,
+  .analytics-stats {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .card {
+    width: 100%;
+    min-height: 240px;
+    border-radius: 16px;
+    border-width: 1px;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    justify-content: flex-start;
+  }
+
+  .card__title {
+    margin: 0.2rem 0 0.5rem;
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .title3 {
+    line-height: 1.2;
+  }
+
+  .donut-container {
+    width: 120px;
+    height: 120px;
+    margin: 0.35rem auto 0.75rem;
+  }
+
+  .donut-center {
+    font-size: 1.25rem !important;
+  }
+
+  .legend {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    line-height: 1.25;
+  }
+
+  .legend__dot {
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+  }
+
+  .chart-box-sm {
+    height: 170px;
+  }
+
+  .chart-box-lg {
+    height: 170px;
+  }
+
+  .order-history {
+    width: 100%;
+  }
+
+  .orders-card {
+    width: 100%;
+    min-height: auto;
+    border-radius: 16px;
+    border-width: 1px;
+    padding-bottom: 0.75rem;
+  }
+
+  .orders-card__header {
+    width: auto;
+    margin: 0.8rem 0.8rem 0.4rem;
+  }
+
+  .orders-card__header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .icon-clock {
+    width: 16px;
+    height: 16px;
+  }
+
+  .orders-list {
+    margin: 0.5rem 0.8rem 0.7rem;
+  }
+
+  .order-item {
+    min-height: 64px;
+    border-radius: 12px;
+    padding: 0.55rem 0.65rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .order-title {
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .order-sub {
+    margin-top: 0.12rem;
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .order-img {
+    width: 44px;
+    height: 44px;
+    margin-left: 0.5rem;
+  }
+
+  .orders-card__footer a {
+    font-size: 0.78rem;
+  }
+}

@@ -1,0 +1,345 @@
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+}
+
+* {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+}
+
+.loginbg {
+  width: min(1120px, 92vw);
+  height: min(760px, 92vh);
+  border: 1px solid #d6c6ad;
+  border-radius: 15px;
+  background-color: #e9dcc7;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.loginbgimg {
+  margin-left: 48px;
+  flex: 0 0 auto;
+}
+
+
+.pizzaimg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: rotate 20s linear infinite;
+}
+
+.rotating-container {
+  --spin-size: 420px;
+  position: relative;
+  width: var(--spin-size);
+  height: var(--spin-size);
+  min-width: var(--spin-size);
+  min-height: var(--spin-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.circular-text-svg path {
+  stroke: none;
+  fill: none;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.circular-text-svg {
+  position: absolute;
+  inset: -2.5%;
+  width: 105%;
+  height: 105%;
+  transform: rotate(0deg);
+  animation: rotate-counterclockwise 20s linear infinite;
+}
+
+text {
+  font-size: 20px;
+  fill: #CF8917;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-anchor: middle;
+}
+
+@keyframes rotate-counterclockwise {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.logintext {
+  color: black;
+  font-size: 35px;
+  margin-top: 5vh;
+  line-height: 0.5;
+  letter-spacing: 1px;
+  margin-left: 4.7vw;
+}
+
+.text2 {
+  margin-top: 25vh;
+}
+
+.loginform {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 2;
+  /* border: 1px solid black; */
+  min-height: 100%;
+  width: 600px;
+  max-height: 100%;
+  border-radius: 15px;
+  background-color: #f4eddf;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
+
+.loginform form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+  /* border: 1px solid black; */
+}
+
+#submitbtn {
+  margin-top: 3vh;
+  height: 60px;
+  width: 72%;
+  border-radius: 15px;
+  font-size: 16px;
+  background-color: #CF8917;
+  color: white;
+  font-weight: 600;
+  margin-left: 1vw;
+  cursor: pointer;
+}
+
+#uname:focus,
+#pword:focus {
+  outline: none;
+}
+
+.regtext {
+  color: #CF8917;
+  margin-top: 4vh;
+  font-weight: 600;
+  margin-left: 1vw;
+  margin-bottom: 4vh;
+}
+
+#regbtn {
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: #CF8917;
+  font-size: 15px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.float-label,
+.float-label2 {
+  position: relative;
+  width: 70%;
+  margin: 2vh 0;
+}
+
+.float-label::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  left: 15px;
+  top: 18px;
+  font-size: 16px;
+  color: #999;
+  background-color: #fafafa;
+  padding: 0 5px;
+  transition: 0.2s ease all;
+  pointer-events: none;
+}
+
+.float-label2::before {
+  content: "Password";
+  position: absolute;
+  left: 15px;
+  top: 18px;
+  font-size: 16px;
+  color: #999;
+  background-color: #fafafa;
+  padding: 0 5px;
+  transition: 0.2s ease all;
+  pointer-events: none;
+}
+
+
+.float-label:has(input:focus)::before,
+.float-label:has(input:not(:placeholder-shown))::before,
+.float-label2:has(input:focus)::before,
+.float-label2:has(input:not(:placeholder-shown))::before {
+  top: 5px;
+  left: 10px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.float-label input,
+.float-label2 input {
+  width: 100%;
+  height: 30px;
+  padding: 1.25rem 10px 0.5rem;
+  font-size: 16px;
+  border: 1px solid #ababab;
+  border-radius: 15px;
+  background-color: #fafafa;
+  outline: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .login {
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    align-items: flex-start;
+    background-color: #f4eddf;
+  }
+
+  .loginbg {
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    border: none;
+    border-radius: 0;
+    background-color: #f4eddf;
+    box-shadow: none;
+    padding: max(12px, env(safe-area-inset-top)) 16px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .loginbgimg {
+    margin: 8px 0 0;
+  }
+
+  .rotating-container {
+    --spin-size: min(63vw, 255px);
+  }
+
+  text {
+    font-size: 16px;
+    letter-spacing: 1.6px;
+  }
+
+  .loginform {
+    width: 100%;
+    max-width: 420px;
+    min-height: auto;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .logintext {
+    font-size: clamp(34px, 9vw, 44px);
+    line-height: 1;
+    margin: 8px 0 12px;
+    letter-spacing: 0;
+    text-align: center;
+    align-self: center;
+  }
+
+  .text2 {
+    margin-top: 8px;
+  }
+
+  .float-label,
+  .float-label2 {
+    width: 92%;
+    margin: 9px 0;
+  }
+
+  .float-label::before,
+  .float-label2::before {
+    top: 15px;
+    left: 14px;
+    font-size: 15px;
+  }
+
+  .float-label input,
+  .float-label2 input {
+    height: 54px;
+    padding: 1.15rem 12px 0.45rem;
+    font-size: 16px;
+    border-radius: 12px;
+    border-color: #c6c6c6;
+  }
+
+  #submitbtn {
+    width: 92%;
+    height: 52px;
+    margin: 14px 0 0;
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .regtext {
+    width: 92%;
+    text-align: center;
+    margin: 12px 0 8px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  #regbtn {
+    font-size: 15px;
+    padding: 0;
+  }
+}

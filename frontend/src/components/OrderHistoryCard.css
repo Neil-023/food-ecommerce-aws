@@ -1,0 +1,141 @@
+.order-history-card {
+  border: 1px solid #CF8917;
+  border-radius: 12px;
+  padding: 40px 30px;
+  margin-bottom: 20px;
+  background-color: #F8F4ED;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.5s ease;
+}
+
+.order-history-card:hover {
+  background-color: rgb(239, 234, 229);
+}
+
+.order-header {
+  display: flex;
+    flex-direction: column;
+    gap: 8px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.order-header-1strow{
+width: 100%;
+font-size: 1.3rem;
+display: flex;
+  flex-direction: row;
+  align-items: space-between;
+  justify-content: space-between;
+}
+
+/* OrderHistoryCard.css */
+
+.order-status {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  background: white;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  position: relative;
+  z-index: 1000;
+  text-transform: capitalize;
+}
+
+/* hide native arrow on our styled select */
+.order-status-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  background-color: #F8F4ED;        /* same as .order-history-card */
+  border: 1px solid #CF8917;        /* same border color */
+  border-radius: 12px;              /* same radius */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  padding: 6px 30px 6px 10px;       /* room for text + custom arrow */
+  font-size: 0.9rem;
+  color: inherit;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6H0z' fill='%23666'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+/* when open, keep box‑shadow so arrow still shows */
+.order-status-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(200,120,0,0.3);
+}
+
+/* color‑code the options like your badges */
+.order-status-select.pending   { background-color: #fff4e5; color: #d88a00; }
+.order-status-select.delivered { background-color: #e6ffec; color: #2f8f46; }
+.order-status-select.completed { background-color: #e5f0ff; color: #1a57a0; }
+/* fallback badge for non‑managers */
+.order-status-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  text-transform: capitalize;
+  font-size: 0.9rem;
+}
+
+/* different colors */
+.order-status-badge.pending,
+.order-status-select.pending { background: #fff4e5; color: #d88a00; }
+.order-status-badge.delivered,
+.order-status-select.delivered { background: #e6ffec; color: #2f8f46; }
+.order-status-badge.completed,
+.order-status-select.completed { background: #e5f0ff; color: #1a57a0; }
+
+/* if you ever render a disabled <select> directly */
+.order-status-select:disabled {
+  pointer-events: none;
+  color: #666;
+  background: #f5f5f5;
+}
+
+
+.order-status.pending   { background-color: #fff4e5; color: #d88a00; }
+.order-status.delivered { background-color: #e6ffec; color: #2f8f46; }
+.order-status.completed { background-color: #e5f0ff; color: #1a57a0; }
+
+/* ensure parent won’t clip the dropdown */
+.order-group {
+  overflow: visible;
+}
+
+
+.order-status.delivered {
+  background-color: #e6ffec;
+  color: #2f8f46;
+}
+
+.order-status.pending {
+  background-color: #fff4e5;
+  color: #d88a00;
+}
+
+.order-status.cancelled {
+  background-color: #ffeaea;
+  color: #d9534f;
+}
+
+.order-header-date {
+  font-weight: normal;
+  font-size: 0.9rem;
+  color: gray;
+}
+
+.order-total {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: right;
+  color: #333;
+}

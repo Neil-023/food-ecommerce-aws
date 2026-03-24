@@ -1,0 +1,1052 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+  /* 🛑 IMPORTANT: Change this number to your current monitor's screen width! 
+     For example, if you are on a 1440px laptop, change 1920 to 1440. 
+     This locks your exact pixel design to the window perfectly. */
+  --dw: 1920;
+}
+
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+.main-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  margin: 0;
+  font-family: monospace;
+  overflow: hidden;
+  /* Added to stop scrollbars during zoom */
+}
+
+header {
+  position: absolute;
+  width: 100%;
+  z-index: 100;
+  border-bottom: 1px solid #fff4;
+}
+
+.top-navbar {
+  width: 40%;
+  height: 10vh;
+  background-color: #f4eddf;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.6vw;
+  position: fixed;
+  top: 0;
+  right: 5vw;
+  z-index: 10;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.6vw;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #222;
+  cursor: pointer;
+}
+
+.mobile-menu-btn .material-symbols-outlined {
+  font-size: calc(32 / var(--dw) * 100vw);
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 48;
+}
+
+.nav-btn {
+  background-color: transparent;
+  border: none;
+  font-size: calc(14.4 / var(--dw) * 100vw);
+  /* 0.9rem */
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: calc(10 / var(--dw) * 100vw);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 1111;
+}
+
+.nav-btn.active {
+  text-decoration: underline;
+  text-decoration-thickness: calc(3 / var(--dw) * 100vw);
+  text-underline-offset: calc(15 / var(--dw) * 100vw);
+  text-decoration-color: #1e293b;
+  font-weight: 700;
+}
+
+.circle {
+  width: calc(1000 / var(--dw) * 100vw);
+  height: calc(1000 / var(--dw) * 100vw);
+  border-radius: 100%;
+  border: calc(220 / var(--dw) * 100vw) solid #d6c6ad;
+  position: absolute;
+  top: -97vh;
+  left: -25vw;
+  z-index: 10;
+}
+
+.slider {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f4eddf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 4vh;
+  left: 7vw;
+  width: calc(550 / var(--dw) * 100vw);
+  height: auto;
+  z-index: 11;
+}
+
+.slide.enter.next {
+  animation: enterFromRight 2s ease forwards;
+}
+
+.slide.enter.prev {
+  animation: enterFromLeft 2s ease forwards;
+}
+
+.slide.exit.next {
+  animation: exitToLeft 3s ease forwards;
+}
+
+.slide.exit.prev {
+  animation: exitToRight 3s ease forwards;
+}
+
+.slide.prev {
+  animation: enterFromLeft 1s ease forwards;
+}
+
+.slide img {
+  width: calc(570 / var(--dw) * 100vw);
+  height: calc(570 / var(--dw) * 100vw);
+  object-fit: cover;
+}
+
+@keyframes enterFromRight {
+  0% {
+    transform: rotate(-50deg) translate(calc(1850 / var(--dw) * 100vw), calc(-1000 / var(--dw) * 100vw)) scale(1);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotate(0deg) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes exitToRight {
+  0% {
+    transform: rotate(0deg) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(-50deg) translate(calc(1800 / var(--dw) * 100vw), calc(-1000 / var(--dw) * 100vw)) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes exitToLeft {
+  from {
+    transform: rotate(0deg) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: rotate(40deg) translate(calc(-1900 / var(--dw) * 100vw), calc(50 / var(--dw) * 100vw)) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes enterFromLeft {
+  from {
+    transform: rotate(40deg) translate(calc(-1900 / var(--dw) * 100vw), calc(50 / var(--dw) * 100vw)) scale(1);
+    opacity: 0;
+  }
+
+  to {
+    transform: rotate(0deg) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+#prev,
+#next {
+  position: absolute;
+  top: 30%;
+  font-size: calc(48 / var(--dw) * 100vw);
+  /* 3rem */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black !important;
+}
+
+.small-nav .material-symbols-outlined {
+  font-size: calc(64 / var(--dw) * 100vw);
+  /* 4rem */
+  color: black !important;
+}
+
+#prev {
+  right: 100%;
+}
+
+#next {
+  right: calc(40 / var(--dw) * 100vw);
+}
+
+.pizza-name {
+  position: absolute;
+  top: 10vh;
+  left: 35vw;
+  text-align: start;
+  font-size: calc(48 / var(--dw) * 100vw);
+  /* 3rem */
+  color: #444;
+  font-weight: bold;
+  width: auto;
+  animation: fadeInName 0.5s ease-in;
+  text-transform: uppercase;
+  z-index: 100;
+}
+
+.pizza-name p {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.pizza-title {
+  font-weight: 100;
+  font-size: calc(88 / var(--dw) * 100vw);
+  /* 5.5rem */
+}
+
+.pizza-label {
+  font-weight: 900;
+  font-size: calc(96 / var(--dw) * 100vw);
+  /* 6rem */
+  line-height: 1;
+}
+
+.top-label {
+  font-size: calc(19.2 / var(--dw) * 100vw);
+  /* 1.2rem */
+  font-weight: 600;
+  color: black;
+  text-align: start;
+  animation: fadeInName 0.5s ease-in;
+}
+
+.pizza-name.mobile-only {
+  display: none;
+}
+
+@keyframes fadeInName {
+  from {
+    opacity: 0;
+    transform: translateY(calc(20 / var(--dw) * 100vw));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.letter {
+  display: inline-block;
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeInLetter 0.4s forwards;
+}
+
+.fade-out {
+  animation: fadeOutLetter 0.3s forwards;
+}
+
+@keyframes fadeInLetter {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(10 / var(--dw) * 100vw));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutLetter {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(calc(-10 / var(--dw) * 100vw));
+  }
+}
+
+.bottom-carousel {
+  position: absolute;
+  bottom: 22vh;
+  left: 13vw;
+  width: 52vw;
+  height: 20vh;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.preview-cards {
+  display: flex;
+  gap: calc(30 / var(--dw) * 100vw);
+  overflow: hidden;
+  width: 100%;
+}
+
+.preview-card {
+  width: 8vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: calc(14.4 / var(--dw) * 100vw);
+  /* 0.9rem */
+  line-height: 0;
+  color: #333;
+  padding: 1.2vw 0;
+  font-weight: 800;
+}
+
+.preview-card img {
+  width: calc(120 / var(--dw) * 100vw);
+  height: calc(120 / var(--dw) * 100vw);
+  object-fit: cover;
+  border-radius: calc(10 / var(--dw) * 100vw);
+  margin-bottom: calc(5 / var(--dw) * 100vw);
+}
+
+.small-nav {
+  background: none;
+  border: none;
+  font-size: calc(24 / var(--dw) * 100vw);
+  /* 1.5rem */
+  margin: 0 calc(10 / var(--dw) * 100vw);
+  cursor: pointer;
+  color: black;
+  font-weight: 900;
+}
+
+.preview-card.active-preview {
+  background-color: #e9dcc7;
+  border-radius: calc(30 / var(--dw) * 100vw);
+}
+
+.pizza-details-card {
+  width: 20vw;
+  height: 55vh;
+  background: #f4eddf;
+  border-radius: calc(20 / var(--dw) * 100vw);
+  border: calc(3 / var(--dw) * 100vw) solid #b8a789;
+  padding: 2vw;
+  position: absolute;
+  right: 10vw;
+  top: 15vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 10;
+  box-shadow: calc(-5 / var(--dw) * 100vw) calc(10 / var(--dw) * 100vw) calc(15 / var(--dw) * 100vw) rgba(0, 0, 0, 0.2);
+}
+
+.pizza-details-card h3 {
+  font-size: calc(32 / var(--dw) * 100vw);
+  /* 2rem */
+  margin-bottom: calc(16 / var(--dw) * 100vw);
+  /* 1rem */
+}
+
+.pizza-details-card p {
+  font-size: calc(16 / var(--dw) * 100vw);
+  /* 1rem */
+  margin-bottom: calc(8 / var(--dw) * 100vw);
+  /* 0.5rem */
+  color: #444;
+}
+
+.pizza-details-card .price {
+  font-size: calc(24 / var(--dw) * 100vw);
+  /* 1.5rem */
+  font-weight: bold;
+  color: #222;
+  background-color: #d6c6ad;
+  width: 6vw;
+  height: 15vh;
+  border-radius: calc(20 / var(--dw) * 100vw);
+  margin-top: 5vh;
+  position: relative;
+}
+
+.pizza-details-card .price p {
+  position: absolute;
+  left: 35%;
+  top: -10%;
+  font-size: calc(60 / var(--dw) * 100vw);
+  font-weight: 700;
+}
+
+.add-to-cart-btn {
+  margin-top: auto;
+  padding: calc(16 / var(--dw) * 100vw) calc(24 / var(--dw) * 100vw);
+  /* 1rem 1.5rem */
+  background: #e9dcc7;
+  color: black;
+  font-size: calc(16 / var(--dw) * 100vw);
+  /* 1rem */
+  border: none;
+  border-radius: calc(10 / var(--dw) * 100vw);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 600;
+  width: 10vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 / var(--dw) * 100vw);
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: calc(10 / var(--dw) * 100vw);
+  margin: calc(12 / var(--dw) * 100vw) 0;
+  margin-left: calc(20 / var(--dw) * 100vw);
+  font-size: calc(20 / var(--dw) * 100vw);
+}
+
+.quantity-control button {
+  font-size: calc(20 / var(--dw) * 100vw);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.quantity-container {
+  display: flex;
+  font-weight: 700;
+}
+
+@keyframes fadeInUp2 {
+  from {
+    opacity: 0;
+    transform: translateY(calc(20 / var(--dw) * 100vw));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft2 {
+  from {
+    opacity: 0;
+    transform: translateX(calc(20 / var(--dw) * 100vw));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp2 1.8s ease forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.fade-in-left {
+  animation: fadeInLeft2 1.8s ease forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.dots-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(10 / var(--dw) * 100vw);
+  margin-top: calc(10 / var(--dw) * 100vw);
+  padding-bottom: 1vh;
+  z-index: 100;
+  width: auto;
+  height: 3vh;
+  position: absolute;
+  bottom: 17vh;
+  left: 35%;
+}
+
+.dot {
+  width: calc(10 / var(--dw) * 100vw);
+  height: calc(10 / var(--dw) * 100vw);
+  border-radius: 50%;
+  background-color: #d6c6ad;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dot:hover {
+  transform: scale(1.2);
+}
+
+.dot.active-dot {
+  background-color: #333;
+}
+
+.mobile-scroll-section {
+  display: contents;
+}
+
+.product-desc {
+  font-weight: 900;
+}
+
+.bottom-nav-bar {
+  display: flex;
+  justify-content: space-around;
+  padding: calc(16 / var(--dw) * 100vw) 0;
+  /* 1rem 0 */
+  background-color: #f4eddf;
+  position: fixed;
+  bottom: 4vh;
+  left: 35vw;
+  width: 27vw;
+  z-index: 10;
+  height: 8vh;
+}
+
+.category-btn {
+  background: none;
+  width: 5vw;
+  height: 10vh;
+  border-radius: calc(20 / var(--dw) * 100vw);
+  border: none;
+  font-weight: bold;
+  font-size: calc(16 / var(--dw) * 100vw);
+  /* 1rem */
+  cursor: pointer;
+  padding: calc(8 / var(--dw) * 100vw);
+  /* 0.5rem */
+  color: #8c7a5d;
+  display: flex;
+  gap: calc(10 / var(--dw) * 100vw);
+  flex-direction: column;
+  justify-content: center;
+}
+
+.category-btn .material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-size: calc(40 / var(--dw) * 100vw);
+  color: #8c7a5d;
+  font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 48 !important;
+}
+
+.category-btn.active-category,
+.category-btn:hover {
+  background-color: #e9dcc7;
+}
+
+/* =========================================================
+   MOBILE RESPONSIVE LAYOUT (Max Width: 768px)
+   ========================================================= */
+@media screen and (max-width: 768px) {
+
+  /* 1. Reset the main page to allow normal scrolling */
+  .main-page {
+    flex-direction: column;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    min-height: 100vh;
+    height: 100vh;
+    padding-bottom: 0;
+    /* Make room for the fixed bottom nav */
+    background-color: #f4eddf;
+  }
+
+  .mobile-scroll-section {
+    display: block;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 13vh;
+  }
+
+  .top-navbar {
+    width: auto;
+    height: auto;
+    background: transparent;
+    top: 2vh;
+    left: 4vw;
+    right: auto;
+    z-index: 1200;
+  }
+
+  .mobile-menu-btn {
+    width: 12vw;
+    height: 12vw;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 50%;
+    background: #f4eddf;
+    border: 1px solid #dcc9aa;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(40, 33, 20, 0.18);
+  }
+
+  .mobile-menu-btn .material-symbols-outlined {
+    font-size: 7vw;
+  }
+
+  .top-navbar .nav-links {
+    display: none;
+  }
+
+  .top-navbar.mobile-open .nav-links {
+    position: absolute;
+    top: calc(100% + 1vh);
+    left: 0;
+    min-width: 58vw;
+    max-width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.75rem;
+    border-radius: 14px;
+    border: 1px solid #e2d6c1;
+    background: #f4eddf;
+    box-shadow: 0 14px 28px rgba(17, 17, 17, 0.2);
+  }
+
+  .top-navbar.mobile-open .nav-btn {
+    width: 100%;
+    text-align: left;
+    font-size: 4vw;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+  }
+
+  .top-navbar.mobile-open .nav-btn.active {
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    background: #e9dcc7;
+  }
+
+  /* 2. Fix the decorative background circle (Top Right Curve) */
+  .circle {
+    width: 80vw;
+    height: 80vw;
+    border-radius: 50%;
+    /* border: 28vw solid #eaddc5;  */
+    border: 19vw solid #eaddc5;
+    background: transparent;
+    top: -60vw;
+    left: -30vw;
+    z-index: 0;
+  }
+
+  /* 3. Re-flow the container from absolute to relative stacking */
+  .carousel-container {
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 8vh;
+    /* Push down below navbar */
+    position: relative;
+    z-index: 1;
+  }
+
+  .slide {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 52vw;
+    height: 52vw;
+    margin: 0.5vh auto 0;
+  }
+
+  @keyframes mobileEnterFromRight {
+    0% {
+      transform: rotate(-50deg) translate(calc(1850 / var(--dw) * 100vw), calc(-1000 / var(--dw) * 100vw)) scale(1);
+      opacity: 0;
+    }
+
+    100% {
+      transform: rotate(0deg) translate(0, 0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes mobileEnterFromLeft {
+    from {
+      transform: rotate(40deg) translate(calc(-3000 / var(--dw) * 100vw), calc(50 / var(--dw) * 100vw)) scale(1);
+      opacity: 1;
+    }
+
+    to {
+      transform: rotate(0deg) translate(0, 0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes mobileExitToLeft {
+    from {
+      transform: rotate(0deg) translate(0, 0) scale(1);
+      opacity: 1;
+    }
+
+    to {
+      transform: rotate(40deg) translate(calc(-3000 / var(--dw) * 100vw), calc(50 / var(--dw) * 100vw)) scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes mobileExitToRight {
+    0% {
+      transform: rotate(0deg) translate(0, 0) scale(1);
+      opacity: 1;
+    }
+
+    100% {
+      transform: rotate(-50deg) translate(calc(1800 / var(--dw) * 100vw), calc(-1000 / var(--dw) * 100vw)) scale(1);
+      opacity: 0;
+    }
+  }
+
+  /* 2. Override animation classes for mobile */
+  .slide.enter.next {
+    animation: mobileEnterFromRight 2s ease forwards;
+  }
+
+  .slide.enter.prev {
+    animation: mobileEnterFromLeft 2s ease forwards;
+  }
+
+  .slide.exit.next {
+    animation: mobileExitToLeft 2s ease forwards;
+  }
+
+  .slide.exit.prev {
+    animation: mobileExitToRight 2s ease forwards;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    margin: 0;
+    object-fit: cover;
+  }
+
+  /* 4. Format the Title & Tags */
+  .pizza-name {
+    position: relative;
+    top: 10%;
+    left: 0;
+    width: 100vw;
+    /* position: absolute; */
+    padding: 2vh 6vw;
+    margin-top: 4vh;
+    text-align: left;
+    box-sizing: border-box;
+  }
+
+  .pizza-name h2{
+    margin-top: 20%;
+    margin-bottom: 20%;
+  }
+
+  .pizza-name.desktop-only {
+    display: none;
+  }
+
+  .pizza-details-card .pizza-name.mobile-only {
+    display: block;
+    position: static;
+    width: 100%;
+    padding: 0;
+    margin: 0 0 0.6vh;
+    
+  }
+
+  .pizza-details-card .pizza-name.mobile-only h2 {
+    margin: 0;
+  }
+
+  .pizza-details-card .pizza-name.mobile-only .top-label {
+    padding: 4px 10px;
+    font-size: 3vw;
+    margin-bottom: 0.4vh;
+  }
+
+  .pizza-details-card .pizza-name.mobile-only .pizza-title,
+  .pizza-details-card .pizza-name.mobile-only .pizza-label {
+    font-size: 8.6vw !important;
+    line-height: 0.95;
+  }
+  .top-label {
+    display: inline-block;
+    background-color: #eaddc5;
+    color: #444;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 3.5vw;
+    letter-spacing: 0.5px;
+    margin-bottom: 1vh;
+  }
+
+  .pizza-title,
+  .pizza-label {
+    font-size: 11vw !important;
+    /* !important overrides the JS inline styles */
+    font-weight: 300;
+    line-height: 1;
+    color: #111;
+    display: inline;
+  }
+
+  /* 5. Flatten the Details Card into the main body */
+  .pizza-details-card {
+    position: relative;
+    width: 100vw;
+    height: auto;
+    min-height: unset;
+    top: 0;
+
+    right: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.5vh 6vw 1.5vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vh;
+    box-sizing: border-box;
+  }
+
+  /* Hide redundant desktop elements */
+  .pizza-details-card .product-desc,
+  .pizza-details-card h3 {
+    display: none;
+  }
+
+  /* Format Price */
+  .pizza-details-card .price {
+    background: transparent;
+    width: auto;
+    height: auto;
+    margin: 0 0 0.8vh;
+    text-align: left;
+  }
+
+  .pizza-details-card .price p {
+    position: static;
+    font-size: 8vw;
+    font-weight: bold;
+    color: #111;
+  }
+
+  /* Format Description & Stock */
+  .pizza-details-card p {
+    font-size: 3.8vw;
+    line-height: 1.35;
+    margin-bottom: 0.8vh;
+    color: #333;
+  }
+
+  /* Quantity Controls */
+  .quantity-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2.5vw;
+    margin: 0;
+  }
+
+  .quantity-container p {
+    margin: 0;
+    font-size: 4.5vw;
+    color: #111;
+  }
+
+  .quantity-control {
+    margin-left: 0;
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1.2vw 3.2vw;
+  }
+
+  .quantity-control button {
+    font-size: 5vw;
+    padding: 0 3vw;
+  }
+
+  /* Add to Cart Button */
+  .add-to-cart-btn {
+    width: 100%;
+    height: auto;
+    min-height: 46px;
+    margin-top: 0.2vh;
+    padding: 2.8vw 4vw;
+    border-radius: 15px;
+    background-color: #a79374;
+    /* Matching the screenshot's brown */
+    color: white;
+    font-size: 4.5vw;
+    box-shadow: none;
+  }
+
+  /* 6. Bottom Carousel (Related Items) */
+  .bottom-carousel {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: auto;
+    margin-top: 0.8vh;
+    padding: 1.5vh 6vw 1.6vh;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+    border-top: 1px solid #e6d9c2;
+  }
+
+  /* Inject "Related Items" title dynamically */
+  .bottom-carousel::before {
+    content: "Related Items";
+    font-size: 5.5vw;
+    font-weight: 500;
+    margin-bottom: 2vh;
+    color: #111;
+    display: block;
+  }
+
+  .preview-cards {
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 4vw;
+    padding-bottom: 2vh;
+  }
+
+  /* Hide scrollbar for a cleaner look */
+  .preview-cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .preview-card {
+    width: 24vw;
+    min-width: 24vw;
+    padding: 0;
+  }
+
+  .preview-card img {
+    width: 20vw;
+    height: 20vw;
+    border-radius: 50%;
+    border: 3px solid transparent;
+  }
+
+  .preview-card.active-preview {
+    background: transparent;
+  }
+
+  .preview-card p {
+    font-size: 3vw;
+    margin-top: 1vh;
+    font-weight: 600;
+  }
+
+  /* Hide Desktop-only navigation elements */
+  .small-nav,
+  .dots-container {
+    display: none;
+  }
+
+  /* 7. Bottom Navigation Bar */
+  .bottom-nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 10vh;
+    background: #f4eddf;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1vh 0;
+    border-top: 1px solid #e2d6c1;
+    z-index: 1000;
+  }
+
+  .category-btn {
+    width: auto;
+    height: 100%;
+    font-size: 3vw;
+    padding: 0;
+    color: #555;
+  }
+
+  .category-btn .material-symbols-outlined {
+    font-size: 6.5vw;
+    margin-bottom: 0.5vh;
+    color: #555;
+  }
+
+  .category-btn.active-category,
+  .category-btn:hover {
+    background: transparent;
+    color: #111;
+  }
+
+  .category-btn.active-category .material-symbols-outlined {
+    color: #111;
+  }
+}

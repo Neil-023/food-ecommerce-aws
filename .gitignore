@@ -1,0 +1,22 @@
+# Environments and Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Node / React Frontend
+node_modules/
+dist/
+build/
+
+# Python / FastAPI Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# OS generated files
+.DS_Store
+Thumbs.db

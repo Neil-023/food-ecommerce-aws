@@ -1,0 +1,118 @@
+.seller-list {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4eddf;
+}
+
+.seller-intro {
+    display: flex;
+    flex-direction: row;
+    /* border: 3px solid black; */
+    width: 90%;
+    height: 50%;
+    margin-top: 10vh;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.seller-text h2 {
+    font-size: 65px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.seller-text p {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.seller-image {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    /* border: 1px solid black; */
+    justify-content: center;
+    align-items: center;
+}
+
+.seller-image img {
+    width: 850px;
+    height: 650px;
+    object-fit: cover;
+}
+
+.seller-listview {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.seller-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 90%;
+    height: auto;
+    gap: 2vw;
+}
+
+.seller-buttons a {
+    width: 25vw;
+    height: 27vh;
+    background-color: #e9dcc7;
+    border-radius: 20px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.seller-button:hover {
+    transform: translateY(-3px);
+}
+
+.seller-logo {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    margin: 0;
+    padding: 0;
+    /* border: 1px solid black; */
+}
+
+.seller-info {
+    margin-bottom: 20px;
+    line-height: 0.8;
+}
+
+.seller-info h3{
+    font-weight: 900;
+    font-size: 24px;
+    color: black;
+}
+
+.seller-info p {
+    font-weight: 300;
+    font-size: 18px;
+    color: black;
+}
+
+.seller-buttons button{
+    background: none;
+    border: none;
+}
+
+.seller-buttons .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-size: 60px;
+    color: black;
+    font-weight: 700;
+    cursor: pointer;
+}

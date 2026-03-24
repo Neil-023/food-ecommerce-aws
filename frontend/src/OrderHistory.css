@@ -1,0 +1,38 @@
+.order-history-body {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  background-color: #F4ECDF;
+  overflow: auto;
+}
+  
+.order-history-container {
+  margin-top: calc(90 / var(--dw) * 100vw);  /* 90px */
+  margin-left: 8vw;
+  padding: calc(20 / var(--dw) * 100vw); /* 20px */
+  border-radius: calc(10 / var(--dw) * 100vw); /* 10px */
+  width: 90%; 
+  max-width: 80vw; 
+  display: flex;
+  flex-direction: column; 
+}
+
+.status {
+  text-transform: capitalize;
+}
+
+.order-history-title {
+  font-size: calc(32 / var(--dw) * 100vw); /* 2rem -> 32px */
+  font-weight: bold;
+  letter-spacing: calc(-1.28 / var(--dw) * 100vw); /* -1.28px */
+  margin-bottom: calc(20 / var(--dw) * 100vw); /* 20px */
+  color: #333; 
+}
+    
+.order-total {
+  font-size: calc(19.2 / var(--dw) * 100vw); /* 1.2rem -> 19.2px */
+  font-weight: bold;
+  color: #333;
+  margin-top: calc(10 / var(--dw) * 100vw); /* 10px */
+}
