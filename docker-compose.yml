@@ -12,8 +12,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -22,8 +20,6 @@ services:
     build: ./backend
     container_name: food_ecommerce_backend
     restart: always
-    ports:
-      - "8000:8000"
     depends_on:
       - db
     env_file:
@@ -52,14 +48,19 @@ services:
       - VITE_PROXY_TARGET=${VITE_PROXY_TARGET}
       - VITE_USE_MOCK_FALLBACK=${VITE_USE_MOCK_FALLBACK}
       - CHOKIDAR_USEPOLLING=true # Helps Docker detect file changes
-    ports:
-      - "5173:5173"
     depends_on:
       - backend
-    # --- ADD THESE LINES ---
+  nginx:
+    image: nginx:alpine
+    container_name: food_ecommerce_nginx
+    restart: always
+    ports:
+      - "80:80"
+      # - "443:443" # We will uncomment this later when we set up SSL
     volumes:
-      - ./frontend:/app # Map your local code to the container
-      - /app/node_modules # Anonymous volume to protect container's node_modules
-
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
 volumes:
   pgdata:
