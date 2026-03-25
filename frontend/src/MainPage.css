@@ -251,6 +251,10 @@ header {
   font-size: calc(96 / var(--dw) * 100vw);
   /* 6rem */
   line-height: 1;
+  display: inline-block;
+  max-width: 40vw;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .top-label {
@@ -828,7 +832,7 @@ header {
 
   .pizza-details-card .pizza-name.mobile-only .pizza-title,
   .pizza-details-card .pizza-name.mobile-only .pizza-label {
-    font-size: 8.6vw !important;
+    font-size: clamp(1.8rem, 8.6vw, 3.8rem);
     line-height: 0.95;
   }
   .top-label {
@@ -844,8 +848,7 @@ header {
 
   .pizza-title,
   .pizza-label {
-    font-size: 11vw !important;
-    /* !important overrides the JS inline styles */
+    font-size: clamp(2rem, 11vw, 4.8rem);
     font-weight: 300;
     line-height: 1;
     color: #111;

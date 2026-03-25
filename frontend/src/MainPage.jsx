@@ -205,6 +205,8 @@ function MainPage({ sellerId }) {
 
   const nameParts = currentItem.product_name?.split(' ') ?? [];
   const labelText = nameParts[1] || nameParts[0] || '';
+  const labelLength = labelText.length;
+  const dynamicLabelSize = Math.max(2.2, 7 - labelLength * 0.24);
   const renderPizzaName = (className) => (
     <div className={className}>
       <h2>
@@ -235,8 +237,8 @@ function MainPage({ sellerId }) {
         <span
           className="pizza-label"
           style={{
-            fontSize: `${Math.max(1.5, 6 - 0.1 * (labelText.length - 6))}vw`,
-            transition: 'font-size 0.3s ease',
+            fontSize: `clamp(2rem, ${dynamicLabelSize}vw, 6rem)`,
+            transition: 'font-size 0.25s ease',
           }}
         >
           {labelText.split('').map((char, i) => (
