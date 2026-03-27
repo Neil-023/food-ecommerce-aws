@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import './MainPage.css';
 import { mockData } from './mockData';
 import axios from 'axios';
+import { preloadImagesWithProgress } from './imagePreload';
 
 const FALLBACK_IMAGE = 'https://via.placeholder.com/600x400?text=Food';
 
@@ -30,29 +31,51 @@ function MainPage({ sellerId }) {
   const [isExiting, setIsExiting] = useState(false);
   const [cardStartIndex, setCardStartIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [isCatalogLoading, setIsCatalogLoading] = useState(true);
+  const [preloadProgress, setPreloadProgress] = useState(0);
   const categorySwitchTimeout = useRef(null);
 
   const numericSellerId = sellerId ? Number(sellerId) : null;
 
   // Load categories/products from API first, then fallback to mock data when enabled.
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+
     const loadCatalog = async () => {
+      setIsCatalogLoading(true);
+      setPreloadProgress(0);
       try {
         const [productsResponse, categoriesResponse] = await Promise.all([
           axios.get('/api/products', {
             params: numericSellerId ? { seller_id: numericSellerId } : undefined,
+            signal,
           }),
-          axios.get('/api/categories'),
+          axios.get('/api/categories', { signal }),
         ]);
+
+        if (signal.aborted) return;
 
         const normalizedProducts = (productsResponse.data ?? []).map((product) => ({
           ...product,
           stock: product.avail_stocks,
           image: resolveImage(product.product_img),
         }));
+
+        await preloadImagesWithProgress(
+          normalizedProducts.map((product) => product.image),
+          (percent) => {
+            if (!signal.aborted) {
+              setPreloadProgress(percent);
+            }
+          }
+        );
+        if (signal.aborted) return;
+
         setProducts(normalizedProducts);
         setCategories(categoriesResponse.data ?? []);
       } catch (error) {
+        if (signal.aborted) return;
         console.error('Failed to load catalog from API', error);
         if (!USE_MOCK_FALLBACK) {
           setProducts([]);
@@ -67,12 +90,28 @@ function MainPage({ sellerId }) {
             stock: product.avail_stocks,
             image: resolveImage(product.product_img),
           }));
+
+        await preloadImagesWithProgress(
+          fallbackProducts.map((product) => product.image),
+          (percent) => {
+            if (!signal.aborted) {
+              setPreloadProgress(percent);
+            }
+          }
+        );
+        if (signal.aborted) return;
+
         setProducts(fallbackProducts);
         setCategories(mockData.category_tbl);
+      } finally {
+        if (!signal.aborted) {
+          setIsCatalogLoading(false);
+        }
       }
     };
 
     void loadCatalog();
+    return () => controller.abort();
   }, [numericSellerId]);
 
   // Determine available categories based on loaded products
@@ -194,6 +233,20 @@ function MainPage({ sellerId }) {
     };
   }, []);
 
+  if (isCatalogLoading) {
+    return (
+      <div className="main-page">
+        <Navbar />
+        <div className="main-loading-screen">
+          <div className="main-loading-panel">
+            <div className="loading-spinner" />
+            <p className="loading-text">Loading menu images... {preloadProgress}%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!availableCategories.length || !currentItem) {
     return (
       <div className="main-page">
@@ -205,8 +258,14 @@ function MainPage({ sellerId }) {
 
   const nameParts = currentItem.product_name?.split(' ') ?? [];
   const labelText = nameParts[1] || nameParts[0] || '';
-  const labelLength = labelText.length;
-  const dynamicLabelSize = Math.max(2.2, 7 - labelLength * 0.24);
+  const compactLabelLength = labelText.replace(/\s+/g, '').length;
+  const isLongLabel = compactLabelLength >= 7;
+  const isVeryLongLabel = compactLabelLength >= 9;
+  const dynamicLabelSize = isVeryLongLabel
+    ? 3.2
+    : isLongLabel
+      ? 4.5
+      : Math.max(4.8, 7 - compactLabelLength * 0.24);
   const renderPizzaName = (className) => (
     <div className={className}>
       <h2>
@@ -235,9 +294,9 @@ function MainPage({ sellerId }) {
         </span>
         <br />
         <span
-          className="pizza-label"
+          className={`pizza-label${isLongLabel ? ' is-long' : ''}${isVeryLongLabel ? ' is-very-long' : ''}`}
           style={{
-            fontSize: `clamp(2rem, ${dynamicLabelSize}vw, 6rem)`,
+            fontSize: `clamp(1.55rem, ${dynamicLabelSize}vw, 6rem)`,
             transition: 'font-size 0.25s ease',
           }}
         >

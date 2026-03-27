@@ -6,6 +6,7 @@ import OrderHistoryCard from './components/OrderHistoryCard';
 import './OrderHistory.css';
 import { mockData } from './mockData';
 import axios from 'axios';
+import { preloadImagesWithProgress } from './imagePreload';
 
 const USE_MOCK_FALLBACK = import.meta.env.VITE_USE_MOCK_FALLBACK === 'true';
 
@@ -23,10 +24,14 @@ const resolveImage = (imageUrl) => {
 
 function OrderHistory() {
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [preloadProgress, setPreloadProgress] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadOrders = async () => {
+      setIsLoading(true);
+      setPreloadProgress(0);
       try {
         const response = await axios.get('/api/orders');
         const apiOrders = (response.data ?? []).map((order) => ({
@@ -41,6 +46,13 @@ function OrderHistory() {
             })),
           })),
         }));
+
+        const imageUrls = apiOrders.flatMap((order) =>
+          (order.shops ?? []).flatMap((shop) =>
+            (shop.items ?? []).map((item) => item.product_img)
+          )
+        );
+        await preloadImagesWithProgress(imageUrls, (percent) => setPreloadProgress(percent));
         setOrders(apiOrders);
       } catch (error) {
         console.error('Failed to load orders', error);
@@ -78,12 +90,35 @@ function OrderHistory() {
             ],
           };
         });
+
+        const imageUrls = formattedOrders.flatMap((order) =>
+          (order.shops ?? []).flatMap((shop) =>
+            (shop.items ?? []).map((item) => item.product_img)
+          )
+        );
+        await preloadImagesWithProgress(imageUrls, (percent) => setPreloadProgress(percent));
         setOrders(formattedOrders);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     void loadOrders();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="page-loading-screen">
+          <div className="page-loading-panel">
+            <div className="page-loading-spinner" />
+            <p className="page-loading-text">Loading order images... {preloadProgress}%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

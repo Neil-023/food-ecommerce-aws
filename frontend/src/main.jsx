@@ -17,12 +17,15 @@ import Analytics from './Analytics';
 import SellerOrderPage from './SellerOrderPage.jsx';
 import axios from 'axios';
 import { API_BASE_URL } from './apiConfig';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = API_BASE_URL;
 
 let isRefreshing = false;
 let pendingQueue = [];
+const DEMO_MODE_MESSAGE = 'Modifications are disabled in Demo Mode.';
 
 const processQueue = (error, token = null) => {
   pendingQueue.forEach((promise) => {
@@ -49,6 +52,11 @@ axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    if (error.response?.status === 403 && error.response?.data?.detail === DEMO_MODE_MESSAGE) {
+      toast.error(DEMO_MODE_MESSAGE, { toastId: 'demo-mode-disabled' });
+      return Promise.reject(error);
+    }
 
     if (originalRequest?.url?.includes('/api/auth/refresh')) {
       return Promise.reject(error);
@@ -123,6 +131,13 @@ createRoot(document.getElementById('root')).render(
             <Route path="/seller/:sellerId" element={<DynamicSeller />} />
             <Route path="/SellerOrderPage" element={<SellerOrderPage />} />
           </Routes>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={6000}
+            hideProgressBar
+            closeOnClick
+            pauseOnHover={false}
+          />
         </BrowserRouter>
       </CartProvider>
     </SellerProvider>

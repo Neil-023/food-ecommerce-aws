@@ -153,7 +153,93 @@ text {
   color: white;
   font-weight: 600;
   margin-left: 1vw;
+  border: none;
   cursor: pointer;
+}
+
+.demo-login-btn {
+  margin-top: 1.1vh;
+  height: 50px;
+  width: 72%;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-left: 1vw;
+  cursor: pointer;
+  border: 1.5px solid #CF8917;
+  background: linear-gradient(135deg, #fff8ec 0%, #f9ecd6 100%);
+  color: #8f5710;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.demo-login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(143, 87, 16, 0.16);
+  background: #f7e7ce;
+}
+
+.demo-login-btn:focus-visible {
+  outline: 2px solid #b47010;
+  outline-offset: 2px;
+}
+
+.demo-login-caption {
+  width: 72%;
+  margin: 0.55rem 0 0;
+  margin-left: 1vw;
+  text-align: center;
+  color: #8a7a63;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.page-loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 237, 223, 0.92);
+  z-index: 1400;
+}
+
+.page-loading-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: #f7efdf;
+  border: 1px solid #d8c4a2;
+  box-shadow: 0 12px 30px rgba(80, 54, 18, 0.14);
+}
+
+.page-loading-spinner {
+  width: 46px;
+  height: 46px;
+  border: 4px solid #e5d3b8;
+  border-top-color: #b37617;
+  border-radius: 50%;
+  animation: page-spin 0.9s linear infinite;
+}
+
+.page-loading-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #7d5320;
+}
+
+@keyframes page-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #uname:focus,
@@ -328,6 +414,31 @@ text {
     border-radius: 12px;
     font-size: 22px;
     font-weight: 700;
+  }
+
+  .demo-login-btn {
+    width: 92%;
+    height: 48px;
+    margin: 10px 0 0;
+    border-radius: 12px;
+    font-size: 18px;
+    margin-left: 0;
+  }
+
+  .demo-login-caption {
+    width: 92%;
+    margin: 8px 0 0;
+    margin-left: 0;
+    font-size: 13px;
+  }
+
+  .page-loading-panel {
+    width: min(86vw, 360px);
+  }
+
+  .page-loading-text {
+    font-size: 13px;
+    text-align: center;
   }
 
   .regtext {

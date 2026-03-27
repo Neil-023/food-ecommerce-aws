@@ -76,39 +76,54 @@ function App() {
     }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    if (!loginForm.username || !loginForm.password) {
+  const loginWithCredentials = async (username, password) => {
+    if (!username || !password) {
       alert('Enter a username and password to continue.');
       return;
     }
 
+    const response = await axios.post('/api/auth/login', {
+      username,
+      password,
+    });
+
+    const data = response.data ?? {};
+    if (data.auth_token) {
+      localStorage.setItem('auth_token', data.auth_token);
+    }
+    if (data.refresh_token) {
+      localStorage.setItem('refresh_token', data.refresh_token);
+    }
+
+    const role = data.user?.role ?? 'buyer';
+    localStorage.setItem('role', role);
+    localStorage.setItem('username', data.user?.username ?? username);
+
+    setIsSeller(role === 'admin' || role === 'seller');
+    await loadCart();
+    navigate('/MainPage');
+    setLoginForm({ ...loginDefaults });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/login', {
-        username: loginForm.username,
-        password: loginForm.password,
-      });
-
-      const data = response.data ?? {};
-      if (data.auth_token) {
-        localStorage.setItem('auth_token', data.auth_token);
-      }
-      if (data.refresh_token) {
-        localStorage.setItem('refresh_token', data.refresh_token);
-      }
-
-      const role = data.user?.role ?? 'buyer';
-      localStorage.setItem('role', role);
-      localStorage.setItem('username', data.user?.username ?? loginForm.username);
-
-      setIsSeller(role === 'admin' || role === 'seller');
-      await loadCart();
-      navigate('/MainPage');
-      setLoginForm({ ...loginDefaults });
+      await loginWithCredentials(loginForm.username, loginForm.password);
     } catch (error) {
       console.error('Login failed', error);
       alert(error?.response?.data?.detail ?? 'Login failed. Please check your credentials.');
+    }
+  };
+
+  const handleDemoAdminLogin = async () => {
+    const demoCredentials = { username: 'demo_admin', password: 'demo123' };
+    setLoginForm(demoCredentials);
+
+    try {
+      await loginWithCredentials(demoCredentials.username, demoCredentials.password);
+    } catch (error) {
+      console.error('Demo login failed', error);
+      alert(error?.response?.data?.detail ?? 'Demo login failed. Please try again.');
     }
   };
 
@@ -248,6 +263,10 @@ function App() {
                 </div>
 
                 <button id="submitbtn" type="submit">Login</button>
+                <button className="demo-login-btn" type="button" onClick={handleDemoAdminLogin}>
+                  Login as Demo Admin
+                </button>
+                <p className="demo-login-caption">Read-only recruiter preview account</p>
                 <span className="regtext">
                   Don't have an account yet?
                   <button

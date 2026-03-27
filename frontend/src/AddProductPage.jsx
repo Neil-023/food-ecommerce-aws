@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddProductPage.css';
 import Navbar from './Navbar';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { mockData } from './mockData';
 import axios from 'axios';
 
@@ -241,13 +240,6 @@ function AddProductPage() {
   return (
     <div className="add-product-page">
       <Navbar />
-      <ToastContainer
-        position="bottom-right"
-        autoClose={6000}
-        hideProgressBar
-        closeOnClick
-        pauseOnHover={false}
-      />
       <div className="section1">
         <h2 className="add-product-title">Add New Product</h2>
         <p className="category-title">Category</p>

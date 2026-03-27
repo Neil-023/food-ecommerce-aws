@@ -7,6 +7,7 @@ import './components/OrderHistoryCard.css';
 import './components/OrderHistoryItem.css';
 import { mockData } from './mockData';
 import axios from 'axios';
+import { preloadImagesWithProgress } from './imagePreload';
 
 const USE_MOCK_FALLBACK = import.meta.env.VITE_USE_MOCK_FALLBACK === 'true';
 
@@ -24,9 +25,13 @@ const resolveImage = (imageUrl) => {
 
 function SellerOrderPage() {
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [preloadProgress, setPreloadProgress] = useState(0);
 
   useEffect(() => {
     const loadOrders = async () => {
+      setIsLoading(true);
+      setPreloadProgress(0);
       try {
         const response = await axios.get('/api/admin/orders');
         const formatted = (response.data ?? []).map((order) => ({
@@ -36,6 +41,11 @@ function SellerOrderPage() {
             product_img: resolveImage(item.product_img),
           })),
         }));
+
+        const imageUrls = formatted.flatMap((order) =>
+          (order.items ?? []).map((item) => item.product_img)
+        );
+        await preloadImagesWithProgress(imageUrls, (percent) => setPreloadProgress(percent));
         setOrders(formatted);
       } catch (error) {
         console.error('Failed to load admin orders', error);
@@ -71,12 +81,33 @@ function SellerOrderPage() {
             items,
           };
         });
+
+        const imageUrls = formatted.flatMap((order) =>
+          (order.items ?? []).map((item) => item.product_img)
+        );
+        await preloadImagesWithProgress(imageUrls, (percent) => setPreloadProgress(percent));
         setOrders(formatted);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     void loadOrders();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="page-loading-screen">
+          <div className="page-loading-panel">
+            <div className="page-loading-spinner" />
+            <p className="page-loading-text">Loading order images... {preloadProgress}%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {

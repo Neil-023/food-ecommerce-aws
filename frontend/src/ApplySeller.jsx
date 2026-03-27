@@ -4,8 +4,7 @@ import './ApplySeller.css';
 import Navbar from "./Navbar";
 import { useSeller } from './SellerContext';
 import axios from 'axios';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 function ApplySeller() {
     const navigate = useNavigate();
     const { setIsSeller } = useSeller();
@@ -129,13 +128,6 @@ function ApplySeller() {
                     <button className="submit-button" type="submit">Submit Application</button>
                 </form>
             </div>
-            <ToastContainer
-                position="bottom-right"
-                autoClose={6000}
-                hideProgressBar
-                closeOnClick
-                pauseOnHover={false}
-            />
             <Navbar />
         </div>
     );

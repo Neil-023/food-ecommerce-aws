@@ -58,6 +58,7 @@ REFRESH_TOKEN_DAYS = int(os.getenv("REFRESH_TOKEN_DAYS", "14"))
 ADMIN_USERNAME = get_required_env("ADMIN_USERNAME")
 ADMIN_PASSWORD = get_required_env("ADMIN_PASSWORD")
 ADMIN_EMAIL = get_required_env("ADMIN_EMAIL")
+DEMO_ADMIN_USERNAME = "demo_admin"
 CLOUDINARY_URL = (os.getenv("CLOUDINARY_URL") or "").strip() or None
 
 if CLOUDINARY_URL:
@@ -236,6 +237,12 @@ def require_admin(user: models.User = Depends(get_current_user)) -> models.User:
     return user
 
 
+def require_non_demo_user(user: models.User = Depends(get_current_user)) -> models.User:
+    if user.username == DEMO_ADMIN_USERNAME:
+        raise HTTPException(status_code=403, detail="Modifications are disabled in Demo Mode.")
+    return user
+
+
 def get_or_create_user_cart(user_id: int, db: Session) -> models.Cart:
     cart = db.query(models.Cart).filter(models.Cart.user_id == user_id).first()
     if cart:
@@ -399,6 +406,7 @@ def create_category(
     payload: CategoryCreateRequest,
     db: Session = Depends(get_db),
     _admin: models.User = Depends(require_admin),
+    _allowed_user: models.User = Depends(require_non_demo_user),
 ):
     existing = (
         db.query(models.Category)
@@ -457,6 +465,7 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
 async def upload_product_image(
     file: UploadFile = File(...),
     _admin: models.User = Depends(require_admin),
+    _allowed_user: models.User = Depends(require_non_demo_user),
 ):
     if not CLOUDINARY_URL:
         raise HTTPException(status_code=500, detail="Cloudinary is not configured")
@@ -487,6 +496,7 @@ def create_product(
     payload: AdminProductCreateRequest,
     db: Session = Depends(get_db),
     _admin: models.User = Depends(require_admin),
+    _allowed_user: models.User = Depends(require_non_demo_user),
 ):
     category = db.query(models.Category).filter(models.Category.category_id == payload.category_id).first()
     if not category:
@@ -512,6 +522,7 @@ def update_product(
     payload: AdminProductUpdateRequest,
     db: Session = Depends(get_db),
     _admin: models.User = Depends(require_admin),
+    _allowed_user: models.User = Depends(require_non_demo_user),
 ):
     product = db.query(models.Product).filter(
         models.Product.product_id == product_id,
@@ -545,6 +556,7 @@ def update_product_stock(
     payload: AdminStockUpdateRequest,
     db: Session = Depends(get_db),
     _admin: models.User = Depends(require_admin),
+    _allowed_user: models.User = Depends(require_non_demo_user),
 ):
     product = db.query(models.Product).filter(
         models.Product.product_id == product_id,
@@ -563,6 +575,7 @@ def delete_product(
     product_id: int,
     db: Session = Depends(get_db),
     _admin: models.User = Depends(require_admin),
+    _allowed_user: models.User = Depends(require_non_demo_user),
 ):
     product = db.query(models.Product).filter(
         models.Product.product_id == product_id,
@@ -586,6 +599,7 @@ def get_cart(current_user: models.User = Depends(get_current_user), db: Session 
 def add_cart_item(
     payload: CartItemUpsertRequest,
     current_user: models.User = Depends(get_current_user),
+    _allowed_user: models.User = Depends(require_non_demo_user),
     db: Session = Depends(get_db),
 ):
     product = db.query(models.Product).filter(
@@ -625,6 +639,7 @@ def update_cart_item(
     product_id: int,
     payload: CartItemQuantityRequest,
     current_user: models.User = Depends(get_current_user),
+    _allowed_user: models.User = Depends(require_non_demo_user),
     db: Session = Depends(get_db),
 ):
     cart = get_or_create_user_cart(current_user.user_id, db)
@@ -656,6 +671,7 @@ def update_cart_item(
 def remove_cart_item(
     product_id: int,
     current_user: models.User = Depends(get_current_user),
+    _allowed_user: models.User = Depends(require_non_demo_user),
     db: Session = Depends(get_db),
 ):
     cart = get_or_create_user_cart(current_user.user_id, db)
@@ -670,7 +686,11 @@ def remove_cart_item(
 
 
 @app.delete("/api/cart")
-def clear_cart(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+def clear_cart(
+    current_user: models.User = Depends(get_current_user),
+    _allowed_user: models.User = Depends(require_non_demo_user),
+    db: Session = Depends(get_db),
+):
     cart = get_or_create_user_cart(current_user.user_id, db)
     db.query(models.CartItem).filter(models.CartItem.cart_id == cart.cart_id).delete()
     db.commit()
@@ -681,6 +701,7 @@ def clear_cart(current_user: models.User = Depends(get_current_user), db: Sessio
 def create_order(
     payload: CreateOrderRequest,
     current_user: models.User = Depends(get_current_user),
+    _allowed_user: models.User = Depends(require_non_demo_user),
     db: Session = Depends(get_db),
 ):
     items_to_purchase = []
@@ -820,6 +841,7 @@ def update_admin_order_status(
     order_id: int,
     payload: AdminOrderStatusRequest,
     _admin: models.User = Depends(require_admin),
+    _allowed_user: models.User = Depends(require_non_demo_user),
     db: Session = Depends(get_db),
 ):
     valid = {"pending", "delivered", "completed"}

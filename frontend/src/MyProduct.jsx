@@ -4,6 +4,7 @@ import './MyProduct.css';
 import { Link } from 'react-router-dom';
 import { mockData } from './mockData';
 import axios from 'axios';
+import { preloadImagesWithProgress } from './imagePreload';
 
 const USE_MOCK_FALLBACK = import.meta.env.VITE_USE_MOCK_FALLBACK === 'true';
 
@@ -31,26 +32,55 @@ function MyProduct() {
   );
 
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [preloadProgress, setPreloadProgress] = useState(0);
 
   useEffect(() => {
     const loadProducts = async () => {
+      setIsLoading(true);
+      setPreloadProgress(0);
       try {
         const response = await axios.get('/api/products');
         const normalized = (response.data ?? []).map((product) => ({
           ...product,
           product_img_url: resolveImage(product.product_img),
         }));
+
+        await preloadImagesWithProgress(
+          normalized.map((product) => product.product_img_url),
+          (percent) => setPreloadProgress(percent)
+        );
         setProducts(normalized);
       } catch (error) {
         console.error('Failed to load products', error);
         if (USE_MOCK_FALLBACK) {
+          await preloadImagesWithProgress(
+            fallbackProducts.map((product) => product.product_img_url),
+            (percent) => setPreloadProgress(percent)
+          );
           setProducts(fallbackProducts);
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
     void loadProducts();
   }, [fallbackProducts]);
+
+  if (isLoading) {
+    return (
+      <div className="myproduct-body">
+        <Navbar />
+        <div className="page-loading-screen">
+          <div className="page-loading-panel">
+            <div className="page-loading-spinner" />
+            <p className="page-loading-text">Loading product images... {preloadProgress}%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleRemove = async (productId) => {
     if (!window.confirm('Remove this product?')) {
