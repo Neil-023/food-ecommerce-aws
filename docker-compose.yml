@@ -34,8 +34,8 @@ services:
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS}
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
 
   # 3. THE REACT FRONTEND
   # 3. THE REACT FRONTEND
@@ -52,8 +52,8 @@ services:
       - CHOKIDAR_USEPOLLING=true # Helps Docker detect file changes
     depends_on:
       - backend
-    ports:
-      - "5173:5173"
+    # ports:
+    #   - "5173:5173"
   nginx:
     image: nginx:alpine
     container_name: food_ecommerce_nginx
