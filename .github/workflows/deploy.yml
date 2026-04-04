@@ -3,29 +3,58 @@ name: Deploy Food E-Commerce
 on:
   push:
     branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-food-ecommerce
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     steps:
       - uses: actions/checkout@v4
-      - name: Copy files via SCP
-        uses: appleboy/scp-action@master
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build frontend dist in CI
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+          rm -rf node_modules
+
+      - name: Copy project via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 161.118.239.128
+          username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "."
+          source: "docker-compose.prod.yml,backend,frontend,nginx.prod.conf"
           target: "/home/ubuntu/food-ecommerce"
 
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          host: 161.118.239.128
+          username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            set -euxo pipefail
             cd /home/ubuntu/food-ecommerce
-            docker-compose down
-            docker-compose up -d --build
+
+            cat > .env <<'EOF'
+            ${{ secrets.FOOD_ECOM_DOTENV }}
+            EOF
+
+            docker build -f frontend/Dockerfile.prod -t food-ecommerce-frontend:prod frontend
+            docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
             docker image prune -f
