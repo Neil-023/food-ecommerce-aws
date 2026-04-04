@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: true,
+      allowedHosts: [
+        'foodhub.mooo.com'
+      ],
       proxy: proxyTarget
         ? {
             '/api': {

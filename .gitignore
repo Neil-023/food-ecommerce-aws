@@ -7,7 +7,6 @@
 
 # Node / React Frontend
 node_modules/
-dist/
 build/
 
 # Python / FastAPI Backend

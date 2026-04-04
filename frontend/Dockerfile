@@ -1,20 +1,18 @@
-# 1. Use a lightweight Node.js environment
-FROM node:18-alpine
+# 1. Use the ultra-lightweight Nginx Alpine image
+FROM nginx:alpine
 
-# 2. Set the working directory inside the container
-WORKDIR /app
+# 2. Set the working directory to where Nginx serves files
+WORKDIR /usr/share/nginx/html
 
-# 3. Copy only the package files first (this is a DevOps trick to make builds faster)
-COPY package*.json ./
+# 3. Remove the default Nginx static files
+RUN rm -rf ./*
 
-# 4. Install the frontend dependencies
-RUN npm install
+# 4. Copy the 'dist' folder from your laptop into the container
+# Note: This assumes the 'dist' folder is in the same directory as this Dockerfile
+COPY ./dist .
 
-# 5. Copy the rest of your React code into the container
-COPY . .
+# 5. Expose Port 80 (Standard for Nginx)
+EXPOSE 80
 
-# 6. Expose the port Vite uses
-EXPOSE 5173
-
-# 7. Start the Vite server and expose it to the network
-CMD ["npm", "run", "dev", "--", "--host"]
+# 6. Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
