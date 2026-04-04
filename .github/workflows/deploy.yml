@@ -54,8 +54,10 @@ jobs:
 
           compose() {
             if docker compose version >/dev/null 2>&1; then
+              LEGACY_COMPOSE=0
               docker compose "$@"
             elif command -v docker-compose >/dev/null 2>&1; then
+              LEGACY_COMPOSE=1
               docker-compose "$@"
             else
               echo "No Docker Compose command found on server" >&2
@@ -68,5 +70,12 @@ jobs:
           EOF
 
           docker build -f frontend/Dockerfile.prod -t food-ecommerce-frontend:prod frontend
-          compose -f docker-compose.prod.yml up -d --build --remove-orphans
+
+          if [ "${LEGACY_COMPOSE:-1}" -eq 1 ]; then
+            docker rm -f food_ecommerce_frontend_prod food_ecommerce_backend_prod food_ecommerce_db_prod food_ecommerce_nginx_prod >/dev/null 2>&1 || true
+            compose -f docker-compose.prod.yml up -d --build
+          else
+            compose -f docker-compose.prod.yml up -d --build --remove-orphans
+          fi
+
           docker image prune -f
