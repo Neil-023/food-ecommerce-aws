@@ -22,40 +22,65 @@ docker compose down
 
 ## Production Stack
 
-1. Build frontend assets locally or in CI (not on the server):
+This project now uses split hosting:
 
-```bash
-cd frontend
-npm ci
-npm run build
-```
+- Frontend: GitHub Pages
+- Backend API + database: production server via Docker Compose
 
-2. Build and publish the runtime-only frontend image:
+1. Configure backend env in GitHub secret `FOOD_ECOM_DOTENV`.
 
-```bash
-docker build -f frontend/Dockerfile.prod -t food-ecommerce-frontend:prod frontend
-```
+Required note:
 
-3. Run the production stack (frontend on 3001, backend on 8000):
+- `CORS_ALLOW_ORIGINS` must include both your server domain and your GitHub Pages origin (for example `https://foodhub.mooo.com,https://your-username.github.io`).
+
+2. Run the production stack (API and database):
 
 ```bash
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-If your server should pull a registry image, set FOOD_ECOM_FRONTEND_IMAGE first:
+3. Production endpoints:
 
-```bash
-export FOOD_ECOM_FRONTEND_IMAGE=ghcr.io/your-org/food-ecommerce-frontend:prod
-docker compose -f docker-compose.prod.yml up -d
-```
+- API reverse proxy (Nginx): http://localhost:3001/api
+- Backend container (FastAPI): http://localhost:8000/docs
+- Frontend app: GitHub Pages URL
 
-4. Production endpoints:
-
-- Frontend (Nginx): http://localhost:3001
-- Backend (FastAPI): http://localhost:8000/docs
-
-5. Stop production stack:
+4. Stop production stack:
 
 ```bash
 docker compose -f docker-compose.prod.yml down
 ```
+
+## Frontend Deployment To GitHub Pages
+
+Build and deploy the frontend from `frontend/`:
+
+1. Install dependencies:
+
+```bash
+cd frontend
+npm install
+```
+
+2. Build for GitHub Pages with your API server origin:
+
+```bash
+# PowerShell example (replace values)
+$env:VITE_API_URL="https://foodhub.mooo.com"
+$env:VITE_BASE_PATH="/food-ecommerce/"
+npm run build
+```
+
+Notes:
+
+- `VITE_API_URL` should be your public backend domain without trailing slash.
+- `VITE_BASE_PATH` is `/` if you deploy to `username.github.io`, or `/<repo-name>/` for project pages.
+- Hash router is auto-enabled when `VITE_BASE_PATH` is not `/`, preventing refresh 404s on GitHub Pages.
+
+3. Publish:
+
+```bash
+npm run deploy
+```
+
+After deployment, keep backend and database running only on the server using `docker-compose.prod.yml`.

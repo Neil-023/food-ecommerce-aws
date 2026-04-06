@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route, useParams } from 'react-router-dom';
 import MainPage from './MainPage.jsx';
 import AddProductPage from './AddProductPage';
 import CartPage from './CartPage';
@@ -22,6 +22,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = API_BASE_URL;
+
+const shouldUseHashRouter =
+  import.meta.env.VITE_USE_HASH_ROUTER === 'true' ||
+  (import.meta.env.PROD && import.meta.env.BASE_URL !== '/');
+
+const Router = shouldUseHashRouter ? HashRouter : BrowserRouter;
 
 let isRefreshing = false;
 let pendingQueue = [];
@@ -117,7 +123,7 @@ createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <SellerProvider>
       <CartProvider>
-        <BrowserRouter>
+        <Router>
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/MainPage" element={<MainPage />} />
@@ -138,7 +144,7 @@ createRoot(document.getElementById('root')).render(
             closeOnClick
             pauseOnHover={false}
           />
-        </BrowserRouter>
+        </Router>
       </CartProvider>
     </SellerProvider>
   </React.StrictMode>
