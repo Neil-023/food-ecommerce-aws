@@ -322,8 +322,9 @@ def on_startup():
 
 
 @app.get("/health")
+@app.get("/api/health")
 def health_check():
-    return {"status": "ok", "message": "The FastAPI backend is alive and running!"}
+    return {"status": "online", "server": "oracle-amd-1gb"}
 
 
 @app.post("/api/auth/register")
