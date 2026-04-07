@@ -321,8 +321,9 @@ def on_startup():
         db.close()
 
 
+@app.api_route("/health", methods=["GET", "HEAD"])
 @app.api_route("/api/health", methods=["GET", "HEAD"])
-def health_check():
+async def health_check():
     return {"status": "online", "server": "oracle-amd-1gb"}
 
 
