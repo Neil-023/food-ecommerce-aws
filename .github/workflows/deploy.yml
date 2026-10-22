@@ -43,6 +43,10 @@ jobs:
             --function-name food-ecommerce-backend \
             --zip-file fileb://backend/deployment.zip
 
+          # Wait for the code update to finish processing
+          aws lambda wait function-updated \
+            --function-name food-ecommerce-backend
+
       - name: Update Lambda Environment Variables
         run: |
           aws lambda update-function-configuration \

@@ -10,8 +10,8 @@ resource "aws_iam_role" "lambda_exec" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "lambda.amazonaws.com" }
     }]
   })
@@ -32,7 +32,7 @@ resource "aws_lambda_function" "fastapi_backend" {
   runtime       = "python3.12"
   timeout       = 15
 
-  filename         = "../backend/deployment.zip" 
+  filename         = "../backend/deployment.zip"
   source_code_hash = filebase64sha256("../backend/deployment.zip")
 
   environment {
@@ -44,7 +44,7 @@ resource "aws_lambda_function" "fastapi_backend" {
 
 resource "aws_lambda_function_url" "api_url" {
   function_name      = aws_lambda_function.fastapi_backend.function_name
-  authorization_type = "NONE" 
+  authorization_type = "NONE"
 }
 
 # ==========================================
@@ -66,7 +66,9 @@ resource "aws_iam_user_policy" "github_actions_policy" {
     Statement = [
       {
         Effect = "Allow"
-        Action = ["lambda:UpdateFunctionCode"]
+        Action = ["lambda:UpdateFunctionCode",
+          "lambda:UpdateFunctionConfiguration"
+        ]
         # Automatically targets the exact ARN of the Lambda function created above
         Resource = aws_lambda_function.fastapi_backend.arn
       }
