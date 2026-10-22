@@ -2,7 +2,7 @@ name: Deploy Food E-Commerce Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install Dependencies and Package
         run: |
@@ -29,7 +29,7 @@ jobs:
           cp -r ./*.py ./package/
           cd package
           zip -r ../deployment.zip .
-          
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -42,3 +42,9 @@ jobs:
           aws lambda update-function-code \
             --function-name food-ecommerce-backend \
             --zip-file fileb://backend/deployment.zip
+
+      - name: Update Lambda Environment Variables
+        run: |
+          aws lambda update-function-configuration \
+            --function-name food-ecommerce-backend \
+            --environment "Variables={DATABASE_URL='${{ secrets.DATABASE_URL }}'}"
