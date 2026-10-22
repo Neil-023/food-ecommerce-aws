@@ -51,4 +51,4 @@ jobs:
         run: |
           aws lambda update-function-configuration \
             --function-name food-ecommerce-backend \
-            --environment "Variables={DATABASE_URL='${{ secrets.DATABASE_URL }}'}"
+            --environment "Variables={DATABASE_URL='${{ secrets.DATABASE_URL }}',CORS_ALLOW_ORIGINS='https://foodhub.mooo.com,http://localhost:5173,https://neil-023.github.io'}"
