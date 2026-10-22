@@ -3,6 +3,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from itertools import combinations
 from typing import List, Optional
+from mangum import Mangum
 
 import cloudinary
 import cloudinary.uploader
@@ -973,3 +974,5 @@ def get_admin_analytics(_admin: models.User = Depends(require_admin), db: Sessio
         "combos": combos,
         "recentOrders": recent_orders,
     }
+    
+handler = Mangum(app)

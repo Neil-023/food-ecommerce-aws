@@ -19,3 +19,24 @@ env/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform.lock.hcl
+
+# Python / Backend
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/deployment.zip
+backend/package/
+
+# Environment Variables
+.env
+backend/.env
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
