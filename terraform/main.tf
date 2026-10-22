@@ -67,7 +67,8 @@ resource "aws_iam_user_policy" "github_actions_policy" {
       {
         Effect = "Allow"
         Action = ["lambda:UpdateFunctionCode",
-          "lambda:UpdateFunctionConfiguration"
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:GetFunctionConfiguration"
         ]
         # Automatically targets the exact ARN of the Lambda function created above
         Resource = aws_lambda_function.fastapi_backend.arn
