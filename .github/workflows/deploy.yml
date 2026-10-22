@@ -27,6 +27,12 @@ jobs:
           cd backend
           pip install -r requirements.txt -t ./package
           cp -r ./*.py ./package/
+          
+          # Safely inject the multiline GitHub Secret into a physical .env file
+          cat << 'EOF' > ./package/.env
+          ${{ secrets.FOOD_ECOM_DOTENV }}
+          EOF
+          
           cd package
           zip -r ../deployment.zip .
 
