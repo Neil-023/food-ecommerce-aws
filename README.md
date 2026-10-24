@@ -1,86 +1,90 @@
-# Food E-Commerce Docker Guide
+# 🍕 Sip & Slice: Serverless E-Commerce Platform
 
-This project now supports separate local and production Docker workflows.
+![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Neon Postgres](https://img.shields.io/badge/Neon_Postgres-00E599?style=for-the-badge&logo=postgresql&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
-## Local/Current Stack
+**Live Application:** https://neil-023.github.io/food-ecommerce-aws
 
-Run the existing local stack:
+Sip & Slice is a modern, full-stack food e-commerce platform built on a scalable serverless architecture. Powered by a responsive React frontend and a high-performance FastAPI backend running on AWS Lambda, the application uses Neon PostgreSQL for managed relational data and Cloudinary for optimized media delivery to ensure fast load times, automated CI/CD deployments, and seamless order management.
 
-```bash
-docker compose up --build
-```
+## 🏗️ Cloud Architecture
 
-Default local entrypoint:
+The application relies on decoupled services communicating via RESTful APIs, with deployment pipelines fully automated through GitHub Actions.
 
-- App (Nginx): http://localhost
+<div align="center">
+  <img src="assets/sipandslice.drawio.svg" alt="Sip and Slice AWS Serverless Architecture" width="800">
+</div>
 
-Stop local stack:
+<details>
+<summary><b>View Text-Based Data Flow</b></summary>
 
-```bash
-docker compose down
-```
+```text
+  [ Developer (You) ]
+                               |
+                               | (git push origin main)
+                               v
+                     [ GitHub Repository ]
+                               |
+            +------------------+------------------+
+            | (GitHub Actions)                    | (GitHub Actions)
+            v                                     v
+    [ GitHub Pages ]                       [ AWS Lambda ]
+    (React Frontend)                       (FastAPI Backend)
+            |                                     ^
+            |                                     | 
+            v                                     | (API Requests via Lambda URL)
+    [ User's Browser ] ---------------------------+
+            |
+            |                                     +-------------------+
+            | (Fetches images)                    |                   |
+            v                                     v                   v
+     [ Cloudinary ]                       [ Cloudinary ]      [ Neon PostgreSQL ]
+    (Product Images) <---(Uploads)----   (Image Storage)      (Serverless Database)
 
-## Production Stack
+🛠️ Infrastructure Stack
+Compute (Backend): AWS Lambda (Python/FastAPI adapted with Mangum for serverless execution).
 
-This project now uses split hosting:
+Hosting (Frontend): GitHub Pages serving a compiled React/Vite SPA.
 
-- Frontend: GitHub Pages
-- Backend API + database: production server via Docker Compose
+Database: Neon PostgreSQL (Cloud-native, serverless SQL).
 
-1. Configure backend env in GitHub secret `FOOD_ECOM_DOTENV`.
+Media Storage: Cloudinary (Handling dynamic image uploads and delivery).
 
-Required note:
+CI/CD: GitHub Actions (Independent frontend and backend deployment workflows).
 
-- `CORS_ALLOW_ORIGINS` must include both your server domain and your GitHub Pages origin (for example `https://foodhub.mooo.com,https://your-username.github.io`).
+Legacy Infrastructure (Archived): Oracle Cloud (OCI), Docker, Docker Compose, Nginx. (See /legacy-oci-docker for historical configurations).
 
-2. Run the production stack (API and database):
+⚙️ CI/CD Pipelines
+The repository utilizes two independent GitHub Actions workflows to ensure zero-downtime deployments:
 
-```bash
-docker compose -f docker-compose.prod.yml up -d
-```
+Frontend Pipeline (deploy-frontend.yml): Triggers on pushes to the /frontend directory. Builds the Vite React app and publishes the static assets to the gh-pages branch.
 
-3. Production endpoints:
+Backend Pipeline (deploy-backend.yml): Triggers on pushes to the /backend directory. Packages the FastAPI application and its dependencies, authenticates with AWS via IAM roles/secrets, and updates the AWS Lambda function code.
 
-- API reverse proxy (Nginx): http://localhost:3001/api
-- Backend container (FastAPI): http://localhost:8000/docs
-- Frontend app: GitHub Pages URL
+💻 Local Development Setup
+To run this project locally for development or testing:
 
-4. Stop production stack:
+1. Clone the repository
 
-```bash
-docker compose -f docker-compose.prod.yml down
-```
+git clone [https://github.com/yourusername/sip-and-slice.git](https://github.com/yourusername/sip-and-slice.git)
+cd sip-and-slice
 
-## Frontend Deployment To GitHub Pages
+2. Backend Setup (FastAPI)
 
-Build and deploy the frontend from `frontend/`:
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 
-1. Install dependencies:
+Create a .env file in the /backend directory and add your Neon DATABASE_URL and Cloudinary API keys.
 
-```bash
+fastapi dev main.py
+
+3. Frontend Setup (React/Vite)
+
 cd frontend
 npm install
-```
-
-2. Build for GitHub Pages with your API server origin:
-
-```bash
-# PowerShell example (replace values)
-$env:VITE_API_URL="https://foodhub.mooo.com"
-$env:VITE_BASE_PATH="/food-ecommerce/"
-npm run build
-```
-
-Notes:
-
-- `VITE_API_URL` should be your public backend domain without trailing slash.
-- `VITE_BASE_PATH` is `/` if you deploy to `username.github.io`, or `/<repo-name>/` for project pages.
-- Hash router is auto-enabled when `VITE_BASE_PATH` is not `/`, preventing refresh 404s on GitHub Pages.
-
-3. Publish:
-
-```bash
-npm run deploy
-```
-
-After deployment, keep backend and database running only on the server using `docker-compose.prod.yml`.
+npm run dev
