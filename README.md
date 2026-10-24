@@ -22,27 +22,26 @@ The application relies on decoupled services communicating via RESTful APIs, wit
 <summary><b>View Text-Based Data Flow</b></summary>
 
 ```text
-  [ Developer (You) ]
-                               |
-                               | (git push origin main)
-                               v
-                     [ GitHub Repository ]
-                               |
-            +------------------+------------------+
-            | (GitHub Actions)                    | (GitHub Actions)
-            v                                     v
-    [ GitHub Pages ]                       [ AWS Lambda ]
-    (React Frontend)                       (FastAPI Backend)
-            |                                     ^
-            |                                     | 
-            v                                     | (API Requests via Lambda URL)
-    [ User's Browser ] ---------------------------+
-            |
-            |                                     +-------------------+
-            | (Fetches images)                    |                   |
-            v                                     v                   v
-     [ Cloudinary ]                       [ Cloudinary ]      [ Neon PostgreSQL ]
-    (Product Images) <---(Uploads)----   (Image Storage)      (Serverless Database)
+ [ Developer ]
+       |
+       | Git push
+       v
+[ Github Repository ] ---- Triggers ----> [ Github Actions ]
+                                                |
+          +-------------------------------------+
+          | Deploys Static Site                 | Deploys Serverless API
+          v                                     v
+  [ Github Pages ]                        [ AWS Lambda ] <----(SQL Read / Write)----> [ Neon PostgreSQL ]
+  (React Frontend)                       (FastAPI Backend)
+          |                                     |
+          | Access Website                      | Image Uploads
+          v                                     v
+  [ User's Browser ] ---------------> [ Cloudinary Storage ]
+          |           Fetch Images 
+          |
+          +--------(HTTPS API Requests)-------> [ AWS Lambda ]
+```
+</details>
 
 🛠️ Infrastructure Stack
 Compute (Backend): AWS Lambda (Python/FastAPI adapted with Mangum for serverless execution).
@@ -54,8 +53,6 @@ Database: Neon PostgreSQL (Cloud-native, serverless SQL).
 Media Storage: Cloudinary (Handling dynamic image uploads and delivery).
 
 CI/CD: GitHub Actions (Independent frontend and backend deployment workflows).
-
-Legacy Infrastructure (Archived): Oracle Cloud (OCI), Docker, Docker Compose, Nginx. (See /legacy-oci-docker for historical configurations).
 
 ⚙️ CI/CD Pipelines
 The repository utilizes two independent GitHub Actions workflows to ensure zero-downtime deployments:
