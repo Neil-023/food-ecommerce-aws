@@ -66,22 +66,27 @@ To run this project locally for development or testing:
 
 1. Clone the repository
 
+
+```bash
 git clone [https://github.com/yourusername/sip-and-slice.git](https://github.com/yourusername/sip-and-slice.git)
 cd sip-and-slice
-
+```
 2. Backend Setup (FastAPI)
 
+```bash
 cd backend
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-
+```
 Create a .env file in the /backend directory and add your Neon DATABASE_URL and Cloudinary API keys.
 
+```bash
 fastapi dev main.py
-
+```
 3. Frontend Setup (React/Vite)
-
+```bash
 cd frontend
 npm install
 npm run dev
+```
