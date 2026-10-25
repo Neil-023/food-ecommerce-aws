@@ -68,7 +68,7 @@ To run this project locally for development or testing:
 
 
 ```bash
-git clone [https://github.com/yourusername/sip-and-slice.git](https://github.com/yourusername/sip-and-slice.git)
+git clone https://github.com/yourusername/sip-and-slice.git
 cd sip-and-slice
 ```
 2. Backend Setup (FastAPI)
