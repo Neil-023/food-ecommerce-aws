@@ -6,7 +6,7 @@
 ![Neon Postgres](https://img.shields.io/badge/Neon_Postgres-00E599?style=for-the-badge&logo=postgresql&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
-**Live Application:** https://neil-023.github.io/food-ecommerce-aws
+**Live Application:** https://neil-023.github.io/sip-and-slice-aws
 
 Sip & Slice is a modern, full-stack food e-commerce platform built on a scalable serverless architecture. Powered by a responsive React frontend and a high-performance FastAPI backend running on AWS Lambda, the application uses Neon PostgreSQL for managed relational data and Cloudinary for optimized media delivery to ensure fast load times, automated CI/CD deployments, and seamless order management.
 
